@@ -31,10 +31,10 @@ public class Cela {
 
     private void validarChefeDeGang(Preso preso) {
 
-        if (preso.isChefeGang() && presosExistentes.stream().noneMatch(Preso::isChefeGang)) {
-            System.out.println("Um chefe de gang so pode ser alocado com outro chefe!");
+        if ((preso.isChefeGang() && presosExistentes.stream().anyMatch(Preso::isChefeGang)) || presosExistentes.isEmpty()) {
+
         }
-        System.out.println("Preso alocado!");
+
 
     }
 
