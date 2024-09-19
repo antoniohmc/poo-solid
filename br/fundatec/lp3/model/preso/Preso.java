@@ -15,6 +15,9 @@ public class Preso {
         this.chefeGang = chefeGang;
     }
 
+    public Preso() {
+    }
+
     public String getNome() {
         return nome;
     }
