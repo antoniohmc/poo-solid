@@ -37,9 +37,9 @@ public class Preso {
     @Override
     public String toString() {
         return "Preso " +
-                "nome ='" + nome + '\'' + "\n" +
-                ", periculosidade=" + periculosidade + "\n" +
-                ", deficiencia=" + deficiencia + "\n" +
+                "nome ='" + nome  +
+                ", periculosidade=" + periculosidade +
+                ", deficiencia=" + deficiencia +
                 ", chefeGang=" + chefeGang + "\n";
     }
 }

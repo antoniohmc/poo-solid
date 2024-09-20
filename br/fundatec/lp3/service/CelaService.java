@@ -6,24 +6,45 @@ import br.fundatec.lp3.model.preso.Preso;
 
 import java.util.List;
 
-
 public class CelaService {
 
-    private final Cela cela;
-    private final Preso preso;
-
-    public CelaService(Cela cela, Preso preso) {
-        this.cela = cela;
-        this.preso = preso;
+    public CelaService() {
     }
 
-    public void validarAlocacao() throws Exception {
-        validarPresoDeficiente(cela, preso);
-        validarChefeDeGang(preso);
-        validarPresoComum(preso);
-        validarOcupacao(preso, cela);
 
-        alocarPreso();
+    public void alocarPresoNaCela(Cela cela, Preso preso, List<Preso> presosExistentes) throws Exception {
+
+        validarPresoDeficiente(cela, preso);
+        validarChefeDeGang(cela, preso);
+        validarPresoComum(cela, preso);
+        validarOcupacao(cela, preso);
+
+
+        cela.getPresosExistentes().add(preso);
+
+        int novoTamanho = cela.getTamanho() - preso.getPericulosidade();
+        cela.setTamanho(novoTamanho);
+
+        presosExistentes.remove(preso);
+
+        System.out.println("Preso " + preso.getNome() + " alocado na cela " + cela.getNome());
+    }
+
+    public List<Boolean> verificarCelasDisponiveis(List<Cela> celas, Preso preso) {
+        return celas.stream()
+                .map(cela -> {
+                    try {
+
+                        validarPresoDeficiente(cela, preso);
+                        validarChefeDeGang(cela, preso);
+                        validarPresoComum(cela, preso);
+                        validarOcupacao(cela, preso);
+                        return true;
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getMessage());
+                        return false;
+                    }
+                }).toList();
     }
 
     public void listaDeCelas(List<Cela> celas) {
@@ -33,19 +54,15 @@ public class CelaService {
                 ", Presos: " + cela.getPresosExistentes()));
     }
 
-    private void alocarPreso() {
-        validarOcupacao(preso, cela);
-    }
-
-    private void validarPresoComum(Preso preso) throws PresoComumExeption {
-        if (preso.isChefeGang() && cela.getPresosExistentes().stream().noneMatch(Preso::isChefeGang)) {
-            throw new PresoComumExeption("Um preso comum não pode ser alocado com um Chefe de Gang!");
+    private void validarPresoComum(Cela cela, Preso preso) throws PresoComumExeption {
+        if (!preso.isChefeGang() && cela.getPresosExistentes().stream().anyMatch(Preso::isChefeGang)) {
+            throw new PresoComumExeption("Um preso comum não pode ser alocado com chefes de gangue");
         }
     }
 
-    private void validarChefeDeGang(Preso preso) throws ChefeDeGangExeption {
-        if (preso.isChefeGang() && cela.getPresosExistentes().stream().anyMatch(Preso::isChefeGang) && !cela.getPresosExistentes().isEmpty()) {
-            throw new ChefeDeGangExeption("Um chefe de gang só pode ser alocado em uma cela vazia");
+    private void validarChefeDeGang(Cela cela, Preso preso) throws ChefeDeGangExeption {
+        if (preso.isChefeGang() && (cela.getPresosExistentes().stream().noneMatch(Preso::isChefeGang) && !cela.getPresosExistentes().isEmpty())) {
+            throw new ChefeDeGangExeption("Um chefe de gangue só pode ser alocado com outros chefes ou em uma cela vazia");
         }
     }
 
@@ -55,17 +72,15 @@ public class CelaService {
         }
     }
 
-    private void validarOcupacao(Preso preso, Cela cela) throws PericulosidadeExeption {
+    private void validarOcupacao(Cela cela, Preso preso) throws PericulosidadeExeption {
 
-        int somaPericulosidade = cela.getPresosExistentes().stream().
-                mapToInt(Preso::getPericulosidade).
-                sum();
+        int somaPericulosidade = cela.getPresosExistentes()
+                .stream()
+                .mapToInt(Preso::getPericulosidade)
+                .sum();
 
-        int ocupacaoAtual = somaPericulosidade;
-
-        if (ocupacaoAtual + preso.getPericulosidade() < cela.getTamanho()) {
-
+        if (somaPericulosidade + preso.getPericulosidade() > cela.getTamanho()) {
+            throw new PericulosidadeExeption("A cela não suporta um preso com essa periculosidade.");
         }
-        throw new PericulosidadeExeption("A cela não suporta um preso com essa periculosidade.");
     }
 }

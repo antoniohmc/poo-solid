@@ -1,25 +1,23 @@
 package br.fundatec.lp3.model.cela;
 
-import br.fundatec.lp3.exeptions.ChefeDeGangExeption;
-import br.fundatec.lp3.exeptions.DeficenteExeption;
-import br.fundatec.lp3.exeptions.PresoComumExeption;
 import br.fundatec.lp3.model.preso.Preso;
 import br.fundatec.lp3.service.CelaService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cela {
 
-    private final String nome;
-    private final int tamanho;
-    private final List<Preso> presosExistentes;
+    private String nome;
+    private int tamanho;
+    private List<Preso> presosExistentes;
 
     private CelaService celaService;
 
-    public Cela(String nome, int tamanho, List<Preso> presos) {
+    public Cela(String nome, int tamanho, List<Preso> presosExistentes) {
         this.nome = nome;
         this.tamanho = tamanho;
-        this.presosExistentes = presos;
+        this.presosExistentes = new ArrayList<>();
     }
 
     public String getNome() {
@@ -30,20 +28,17 @@ public class Cela {
         return tamanho;
     }
 
+    public void setTamanho(int tamanho) {
+        this.tamanho = tamanho;
+    }
+
     public List<Preso> getPresosExistentes() {
         return presosExistentes;
     }
 
-    public void alocarPresoNaCela() throws Exception {
-        celaService.validarAlocacao();
-    }
 
     @Override
     public String toString() {
-        return "Cela{" +
-                "nome='" + nome + '\'' +
-                ", tamanho=" + tamanho +
-                ", presosExistentes=" + presosExistentes +
-                '}';
+        return "Cela{" + "nome='" + nome + '\'' + ", tamanho=" + tamanho + ", presosExistentes=" + presosExistentes + '}';
     }
 }
