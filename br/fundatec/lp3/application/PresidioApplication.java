@@ -1,14 +1,9 @@
 package br.fundatec.lp3.application;
 
-import br.fundatec.lp3.exeptions.ChefeDeGangExeption;
-import br.fundatec.lp3.exeptions.DeficenteExeption;
-import br.fundatec.lp3.exeptions.PericulosidadeExeption;
-import br.fundatec.lp3.exeptions.PresoComumExeption;
+
 import br.fundatec.lp3.factory.CelaFactory;
-import br.fundatec.lp3.factory.PresidioFactory;
 import br.fundatec.lp3.factory.PresoFactory;
 import br.fundatec.lp3.model.cela.Cela;
-import br.fundatec.lp3.model.presidio.Presidio;
 import br.fundatec.lp3.model.preso.Preso;
 import br.fundatec.lp3.service.CelaService;
 

@@ -9,8 +9,8 @@ import java.util.List;
 public class CelaService {
 
     public CelaService() {
-    }
 
+    }
 
     public void alocarPresoNaCela(Cela cela, Preso preso, List<Preso> presosExistentes) throws Exception {
 
@@ -18,7 +18,6 @@ public class CelaService {
         validarChefeDeGang(cela, preso);
         validarPresoComum(cela, preso);
         validarOcupacao(cela, preso);
-
 
         cela.getPresosExistentes().add(preso);
 
@@ -45,13 +44,6 @@ public class CelaService {
                         return false;
                     }
                 }).toList();
-    }
-
-    public void listaDeCelas(List<Cela> celas) {
-        celas.forEach(cela -> System.out.println("Nome: " +
-                cela.getNome() +
-                ", Tamanho: " + cela.getTamanho() +
-                ", Presos: " + cela.getPresosExistentes()));
     }
 
     private void validarPresoComum(Cela cela, Preso preso) throws PresoComumExeption {
